@@ -1,4 +1,5 @@
 #include <fstream>
+#include <vector>
 
 #include "Ap4Decrypt.hpp"
 
@@ -41,8 +42,8 @@ int main(int argc, char *argv[]) {
     initFile.close();
     segmentFile.close();
 
-    std::vector<unit8_t> combinedBuffer(initbuffer, initbuffer + initsize);
-    std::vector<unit8_t> segmentDataBuffer(segmentbuffer, segmentbuffer + segmentsize);
+    std::vector<uint8_t> combinedBuffer(initbuffer, initbuffer + initsize);
+    std::vector<uint8_t> segmentDataBuffer(segmentbuffer, segmentbuffer + segmentsize);
     combinedBuffer.insert(combinedBuffer.end(), segmentDataBuffer.begin(), segmentDataBuffer.end());
 
     free(initbuffer);
