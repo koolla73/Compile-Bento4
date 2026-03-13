@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     uint8_t* finalBuffer = (uint8_t*)malloc(combinedBuffer.size());
     memcpy(finalBuffer, combinedBuffer.data(), combinedBuffer.size());
 
-    const size_t finalSize = Ap4_Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
+    const size_t finalSize = AP4_Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
 
     std::ofstream outFile("out.mp4", std::ios::out | std::ios::binary);
     outFile.write(reinterpret_cast<char*>(finalBuffer), finalSize);
