@@ -33,3 +33,7 @@ jobs:
     - name: Run application
       working-directory: ${{ github.workspace}}/build
       run: ./Ap4Decrypt ${{ secrets.KEYID }} ${{ secrets.KEY }} ${{ github.workspace }}/media/video-init.mp4 ${{ github.workspace }}/media/video-40.mp4
+
+    - name: List files
+      working-directory: ${{ github.workspace}}/build
+      run: ls -R
