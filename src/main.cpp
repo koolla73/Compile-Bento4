@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     std::size_t initsize = initbuf->pubseekoff (0, initFile.end, initFile.in);
     initbuf->pubseekpos(0, initFile.in);
     uint8_t* initbuffer = new uint8_t[initsize];
-    initbuf->sgetn(initbuffer, initsize);
+    initbuf->sgetn(reinterpret_cast<char*>(initbuffer), initsize);
 
     initFile.close();
     segmentFile.close();
