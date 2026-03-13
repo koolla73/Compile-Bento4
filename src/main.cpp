@@ -55,6 +55,10 @@ int main(int argc, char *argv[]) {
 
     const size_t finalSize = AP4_Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
 
+    if (finalSize == 0) {
+        exit(-5);
+    }
+
     std::ofstream outFile("out.mp4", std::ios::out | std::ios::binary);
     outFile.write(reinterpret_cast<char*>(finalBuffer), finalSize);
     outFile.close();
