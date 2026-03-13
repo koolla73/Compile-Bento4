@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     initFile.close();
     segmentFile.close();
 
-    Ap4Decrypt::decryptAndFragment();
+    // Ap4Decrypt::decryptAndFragment();
 
     delete[] initbuffer;
     
