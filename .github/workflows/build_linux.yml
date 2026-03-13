@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     
     - name: Prepare library
       run: |
@@ -34,6 +34,10 @@ jobs:
       working-directory: ${{ github.workspace}}/build
       run: ./Ap4Decrypt ${{ secrets.KEYID }} ${{ secrets.KEY }} ${{ github.workspace }}/media/video-init.mp4 ${{ github.workspace }}/media/video-40.mp4
 
-    - name: List files
-      working-directory: ${{ github.workspace}}/build
-      run: ls -R
+    - name: Upload artifact
+      uses: actions/upload-artifact@v6
+      with:
+        name: Mediafile.zip
+        path: ${{ github.workspace}}/build/out.mp4
+        if-no-files-found: error
+        retention-days: 1
