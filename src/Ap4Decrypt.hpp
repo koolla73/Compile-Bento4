@@ -13,6 +13,7 @@ public:
 	AP4_Decrypt(AP4_Decrypt&& other) = delete;
 	AP4_Decrypt& operator=(AP4_Decrypt&& other) = delete;
 
+    [[nodiscard]]
 	static size_t decryptAndFragment(uint8_t* segmentData, const size_t segmentSize, const char* keyId, const char* key);
 
 private:
