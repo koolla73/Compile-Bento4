@@ -27,28 +27,37 @@ int main(int argc, char *argv[]) {
     }
 
     std::filebuf* initbuf = initFile.rdbuf();
-    std::size_t initsize = initbuf->pubseekoff (0, initFile.end, initFile.in);
+    std::size_t initsize = initbuf->pubseekoff(0, initFile.end, initFile.in);
     initbuf->pubseekpos(0, initFile.in);
-    uint8_t* initbuffer = new uint8_t[initsize];
+    uint8_t* initbuffer = (uint8_t*)malloc(initsize);
     initbuf->sgetn(reinterpret_cast<char*>(initbuffer), initsize);
 
     std::filebuf* segmentbuf = segmentFile.rdbuf();
-    std::size_t segmentsize = segmentbuf->pubseekoff (0, segmentFile.end, segmentFile.in);
+    std::size_t segmentsize = segmentbuf->pubseekoff(0, segmentFile.end, segmentFile.in);
     segmentbuf->pubseekpos(0, segmentFile.in);
-    uint8_t* segmentbuffer = new uint8_t[segmentsize];
+    uint8_t* segmentbuffer = (uint8_t*)malloc(segmentsize);
     segmentbuf->sgetn(reinterpret_cast<char*>(segmentbuffer), segmentsize);
 
     initFile.close();
     segmentFile.close();
 
-    // Ap4Decrypt::decryptAndFragment();
+    std::vector<unit8_t> combinedBuffer(initbuffer, initbuffer + initsize);
+    std::vector<unit8_t> segmentDataBuffer(segmentbuffer, segmentbuffer + segmentsize);
+    combinedBuffer.insert(combinedBuffer.end(), segmentDataBuffer.begin(), segmentDataBuffer.end());
 
-    delete[] initbuffer;
-    delete[] segmentbuffer;
+    free(initbuffer);
+    free(segmentbuffer);
+
+    uint8_t* finalBuffer = (uint8_t*)malloc(combinedBuffer.size());
+    memcpy(finalBuffer, combinedBuffer.data(), combinedBuffer.size());
+
+    Ap4Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
 
     // std::ofstream outFile("out.mp4", std::ios::out | std::ios::binary);
     // outFile.write(buffer, size);
     // outFile.close();
+
+    free(finalBuffer);
     
     return 0;
 }
