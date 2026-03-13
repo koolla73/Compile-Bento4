@@ -1,5 +1,7 @@
 #include "Ap4.h"
-#include "Bento4.hpp"
+#include "Ap4Decrypt.hpp"
+
+#include <time.h>
 
 
 #if defined(_MSC_VER)
@@ -938,7 +940,7 @@ static bool IsIFrame(AP4_Sample& sample, AP4_AvcSampleDescription* avc_desc) {
 	return false;
 }
 
-size_t AP4_Decrypt::decryptAndFragment(uint8_t* segmentData, const size_t segmentSize, const char* keyId, const char* key) const {
+size_t AP4_Decrypt::decryptAndFragment(uint8_t* segmentData, const size_t segmentSize, const char* keyId, const char* key) {
 
 	// Decrypt
 	if (strlen(keyId) != 32 || strlen(key) != 32) {
