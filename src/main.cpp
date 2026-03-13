@@ -45,6 +45,10 @@ int main(int argc, char *argv[]) {
 
     delete[] initbuffer;
     delete[] segmentbuffer;
+
+    // std::ofstream outFile("out.mp4", std::ios::out | std::ios::binary);
+    // outFile.write(buffer, size);
+    // outFile.close();
     
     return 0;
 }
