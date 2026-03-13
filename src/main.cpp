@@ -4,7 +4,6 @@
 
 int main(int argc, char *argv[]) {
 
-    exit(-7);
     if (argc != 5) {
         exit(-1);
     }
@@ -33,12 +32,19 @@ int main(int argc, char *argv[]) {
     uint8_t* initbuffer = new uint8_t[initsize];
     initbuf->sgetn(reinterpret_cast<char*>(initbuffer), initsize);
 
+    std::filebuf* segmentbuf = segmentFile.rdbuf();
+    std::size_t segmentsize = segmentbuf->pubseekoff (0, segmentFile.end, segmentFile.in);
+    segmentbuf->pubseekpos(0, segmentFile.in);
+    uint8_t* segmentbuffer = new uint8_t[segmentsize];
+    segmentbuf->sgetn(reinterpret_cast<char*>(segmentbuffer), segmentsize);
+
     initFile.close();
     segmentFile.close();
 
     // Ap4Decrypt::decryptAndFragment();
 
     delete[] initbuffer;
+    delete[] segmentbuffer;
     
     return 0;
 }
