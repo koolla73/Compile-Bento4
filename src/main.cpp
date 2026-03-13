@@ -4,6 +4,7 @@
 
 int main(int argc, char *argv[]) {
 
+    exit(-7);
     if (argc != 5) {
         exit(-1);
     }
