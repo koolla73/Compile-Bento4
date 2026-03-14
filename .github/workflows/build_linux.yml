@@ -18,7 +18,7 @@ jobs:
       run: |
         mkdir temp
         git clone https://github.com/axiomatic-systems/Bento4
-        git checkout 0010f4f
+        git checkout 0010f4fd420ef7d6504d2e401a46c15f4ef3d3ca
         cp -r src/. temp
         cp -r Bento4/Source/C++/Core/. src
         cp -r Bento4/Source/C++/Codecs/. src
