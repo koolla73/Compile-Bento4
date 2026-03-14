@@ -44,8 +44,8 @@ int main(int argc, char *argv[]) {
     initFile.close();
     segmentFile.close();
 
-    const size_t finalSize = initsize + segmentsize;
-    //const size_t finalSize = AP4_Decrypt::decrypt(finalBuffer, initsize + segmentsize, kid.c_str(), key.c_str());
+    //const size_t finalSize = initsize + segmentsize;
+    const size_t finalSize = AP4_Decrypt::decrypt(finalBuffer, initsize + segmentsize, kid.c_str(), key.c_str());
     //const size_t finalSize = AP4_Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
 
     if (finalSize == 0) {
