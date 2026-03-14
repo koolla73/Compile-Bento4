@@ -17,9 +17,7 @@ jobs:
     - name: Prepare library
       run: |
         mkdir temp
-        git clone https://github.com/axiomatic-systems/Bento4
-        git fetch
-        git checkout 0010f4fd420ef7d6504d2e401a46c15f4ef3d3ca
+        git clone --revision=0010f4fd420ef7d6504d2e401a46c15f4ef3d3ca --depth=1 https://github.com/axiomatic-systems/Bento4
         cp -r src/. temp
         cp -r Bento4/Source/C++/Core/. src
         cp -r Bento4/Source/C++/Codecs/. src
