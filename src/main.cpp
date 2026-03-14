@@ -53,7 +53,8 @@ int main(int argc, char *argv[]) {
     uint8_t* finalBuffer = (uint8_t*)malloc(combinedBuffer.size());
     memcpy(finalBuffer, combinedBuffer.data(), combinedBuffer.size());
 
-    const size_t finalSize = AP4_Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
+    const size_t finalSize = AP4_Decrypt::decrypt(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
+    //const size_t finalSize = AP4_Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
 
     if (finalSize == 0) {
         exit(-5);
