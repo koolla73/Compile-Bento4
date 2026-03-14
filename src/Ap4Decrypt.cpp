@@ -21,6 +21,44 @@ static bool TrackIdMatches(unsigned int track_id)
 	return false;
 }
 
+size_t AP4_Decrypt::decrypt(uint8_t* segmentData, const size_t segmentSize, const char* keyId, const char* key) {
+	
+	if (strlen(keyId) != 32 || strlen(key) != 32) {
+		return 0;
+	}
+
+	unsigned char keyID[16];
+	unsigned char decryptionKey[16];
+	AP4_ParseHex(keyId, keyID, 16);
+	AP4_ParseHex(key, decryptionKey, 16);
+
+	AP4_ProtectionKeyMap keyMap;
+	keyMap.SetKeyForKid(keyID, decryptionKey, 16);
+
+	AP4_MemoryByteStream* inputBuffer = new AP4_MemoryByteStream(segmentData, segmentSize);
+	AP4_MemoryByteStream* decryptedOutputBuffer = new AP4_MemoryByteStream();
+	AP4_CencDecryptingProcessor* processor = new AP4_CencDecryptingProcessor(&keyMap);
+
+	const AP4_Result result = processor->Process(*inputBuffer, *decryptedOutputBuffer);
+
+	delete processor;
+	inputBuffer->Release();
+
+	if (AP4_FAILED(result)) {
+		decryptedOutputBuffer->Release();
+		return 0;
+	}
+
+	free(segmentData);
+	const AP4_Size finalSize = decryptedOutputBuffer->GetDataSize();
+	segmentData = (uint8_t*)malloc(finalSize);
+	memcpy(segmentData, decryptedOutputBuffer->GetData(), finalSize);
+
+	decryptedOutputBuffer->Release();
+
+	return static_cast<size_t>(finalSize);
+}
+
 size_t AP4_Decrypt::decryptAndFragment(uint8_t* segmentData, const size_t segmentSize, const char* keyId, const char* key) {
 
 	// Decrypt
