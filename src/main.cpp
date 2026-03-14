@@ -29,11 +29,11 @@ int main(int argc, char *argv[]) {
     }
 
     std::filebuf* initbuf = initFile.rdbuf();
-    const std::size_t initsize = initbuf->pubseekoff(0, initFile.end, initFile.in);
+    const size_t initsize = initbuf->pubseekoff(0, initFile.end, initFile.in);
     initbuf->pubseekpos(0, initFile.in);
 
     std::filebuf* segmentbuf = segmentFile.rdbuf();
-    const std::size_t segmentsize = segmentbuf->pubseekoff(0, segmentFile.end, segmentFile.in);
+    const size_t segmentsize = segmentbuf->pubseekoff(0, segmentFile.end, segmentFile.in);
     segmentbuf->pubseekpos(0, segmentFile.in);
 
     uint8_t* finalBuffer = (uint8_t*)malloc(initsize + segmentsize);
@@ -44,7 +44,8 @@ int main(int argc, char *argv[]) {
     initFile.close();
     segmentFile.close();
 
-    const size_t finalSize = AP4_Decrypt::decrypt(finalBuffer, initsize + segmentsize, kid.c_str(), key.c_str());
+    const size_t finalSize = initsize + segmentsize;
+    //const size_t finalSize = AP4_Decrypt::decrypt(finalBuffer, initsize + segmentsize, kid.c_str(), key.c_str());
     //const size_t finalSize = AP4_Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
 
     if (finalSize == 0) {
