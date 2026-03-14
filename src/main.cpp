@@ -29,31 +29,22 @@ int main(int argc, char *argv[]) {
     }
 
     std::filebuf* initbuf = initFile.rdbuf();
-    std::size_t initsize = initbuf->pubseekoff(0, initFile.end, initFile.in);
+    const std::size_t initsize = initbuf->pubseekoff(0, initFile.end, initFile.in);
     initbuf->pubseekpos(0, initFile.in);
-    uint8_t* initbuffer = (uint8_t*)malloc(initsize);
-    initbuf->sgetn(reinterpret_cast<char*>(initbuffer), initsize);
 
     std::filebuf* segmentbuf = segmentFile.rdbuf();
-    std::size_t segmentsize = segmentbuf->pubseekoff(0, segmentFile.end, segmentFile.in);
+    const std::size_t segmentsize = segmentbuf->pubseekoff(0, segmentFile.end, segmentFile.in);
     segmentbuf->pubseekpos(0, segmentFile.in);
-    uint8_t* segmentbuffer = (uint8_t*)malloc(segmentsize);
-    segmentbuf->sgetn(reinterpret_cast<char*>(segmentbuffer), segmentsize);
+
+    uint8_t* finalBuffer = (uint8_t*)malloc(initsize + segmentsize);
+    
+    initbuf->sgetn(reinterpret_cast<char*>(finalBuffer), initsize);
+    segmentbuf->sgetn(reinterpret_cast<char*>(finalBuffer + initsize), segmentsize);
 
     initFile.close();
     segmentFile.close();
 
-    std::vector<uint8_t> combinedBuffer(initbuffer, initbuffer + initsize);
-    std::vector<uint8_t> segmentDataBuffer(segmentbuffer, segmentbuffer + segmentsize);
-    combinedBuffer.insert(combinedBuffer.end(), segmentDataBuffer.begin(), segmentDataBuffer.end());
-
-    free(initbuffer);
-    free(segmentbuffer);
-
-    uint8_t* finalBuffer = (uint8_t*)malloc(combinedBuffer.size());
-    memcpy(finalBuffer, combinedBuffer.data(), combinedBuffer.size());
-
-    const size_t finalSize = AP4_Decrypt::decrypt(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
+    const size_t finalSize = AP4_Decrypt::decrypt(finalBuffer, initsize + segmentsize, kid.c_str(), key.c_str());
     //const size_t finalSize = AP4_Decrypt::decryptAndFragment(finalBuffer, combinedBuffer.size(), kid.c_str(), key.c_str());
 
     if (finalSize == 0) {
