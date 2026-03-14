@@ -12,12 +12,12 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     
     - name: Prepare library
       run: |
         mkdir temp
-        git clone --depth 1 -b master https://github.com/axiomatic-systems/Bento4
+        git clone --revision=0010f4fd420ef7d6504d2e401a46c15f4ef3d3ca --depth=1 https://github.com/axiomatic-systems/Bento4
         cp -r src/. temp
         cp -r Bento4/Source/C++/Core/. src
         cp -r Bento4/Source/C++/Codecs/. src
@@ -32,4 +32,12 @@ jobs:
         
     - name: Run application
       working-directory: ${{ github.workspace}}/build
-      run: ./Ap4Decrypt
+      run: ./Ap4Decrypt ${{ secrets.KEYID }} ${{ secrets.KEY }} ${{ github.workspace }}/media/video-init.mp4 ${{ github.workspace }}/media/video-40.mp4
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v6
+      with:
+        name: Mediafile.zip
+        path: ${{ github.workspace}}/build/out.mp4
+        if-no-files-found: error
+        retention-days: 1

@@ -13,7 +13,7 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Prepare library
       shell: cmd
       run: |
@@ -35,4 +35,4 @@ jobs:
     - name: Run application
       shell: cmd
       working-directory: ${{ github.workspace}}\build\Release
-      run: Ap4Decrypt.exe
+      run: Ap4Decrypt.exe ${{ secrets.KEYID }} ${{ secrets.KEY }} ${{ github.workspace }}\media\video-init.mp4 ${{ github.workspace }}\media\video-40.mp4
